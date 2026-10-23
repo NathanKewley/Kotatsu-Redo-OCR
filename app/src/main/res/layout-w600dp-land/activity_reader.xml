@@ -46,6 +46,15 @@
 		app:layout_anchorGravity="bottom|end"
 		tools:visibility="visible" />
 
+	<!-- Japanese OCR sidebar. Before the app bars so they draw over it while the reader UI is shown. -->
+	<include
+		android:id="@+id/ocrSidebar"
+		layout="@layout/layout_ocr_sidebar"
+		android:layout_width="@dimen/ocr_sidebar_width"
+		android:layout_height="match_parent"
+		android:layout_gravity="end"
+		android:visibility="gone" />
+
 	<com.google.android.material.appbar.AppBarLayout
 		android:id="@+id/appbar_top"
 		android:layout_width="match_parent"

@@ -32,6 +32,7 @@ import org.koitharu.kotatsu.databinding.ActivitySettingsBinding
 import org.koitharu.kotatsu.main.ui.owners.AppBarOwner
 import org.koitharu.kotatsu.settings.about.AboutSettingsFragment
 import org.koitharu.kotatsu.settings.discord.DiscordSettingsFragment
+import org.koitharu.kotatsu.japanese.ui.settings.JapaneseSettingsFragment
 import org.koitharu.kotatsu.settings.search.SettingsItem
 import org.koitharu.kotatsu.settings.search.SettingsSearchFragment
 import org.koitharu.kotatsu.settings.search.SettingsSearchViewModel
@@ -151,6 +152,7 @@ class SettingsActivity :
 			AppRouter.ACTION_PERIODIC_BACKUP -> PeriodicalBackupSettingsFragment()
 			AppRouter.ACTION_SOURCES -> SourcesSettingsFragment()
 			AppRouter.ACTION_MANAGE_DISCORD -> DiscordSettingsFragment()
+			AppRouter.ACTION_JAPANESE -> JapaneseSettingsFragment()
 			AppRouter.ACTION_PROXY -> ProxySettingsFragment()
 			AppRouter.ACTION_MANAGE_DOWNLOADS -> DownloadsSettingsFragment()
 			AppRouter.ACTION_SOURCE -> SourceSettingsFragment.newInstance(

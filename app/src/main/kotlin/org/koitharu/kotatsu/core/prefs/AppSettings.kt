@@ -191,10 +191,11 @@ class AppSettings @Inject constructor(@ApplicationContext context: Context) {
 	val eInkFlashColor: EInkFlashColor
 		get() = prefs.getEnumValue(KEY_EINK_FLASH_COLOR, EInkFlashColor.WHITE)
 
-	val readerControls: Set<ReaderControl>
+	var readerControls: Set<ReaderControl>
 		get() = prefs.getStringSet(KEY_READER_CONTROLS, null)?.mapNotNullTo(EnumSet.noneOf(ReaderControl::class.java)) {
 			ReaderControl.entries.find(it)
 		} ?: ReaderControl.DEFAULT
+		set(value) = prefs.edit { putStringSet(KEY_READER_CONTROLS, value.mapTo(HashSet()) { it.name }) }
 
 	val isOfflineCheckDisabled: Boolean
 		get() = prefs.getBoolean(KEY_OFFLINE_DISABLED, false)
@@ -594,6 +595,23 @@ class AppSettings @Inject constructor(@ApplicationContext context: Context) {
 		get() = prefs.getString(KEY_DISCORD_TOKEN, null)?.trim()?.nullIfEmpty()
 		set(value) = prefs.edit { putString(KEY_DISCORD_TOKEN, value?.nullIfEmpty()) }
 
+	val isJapaneseTranslationEnabled: Boolean
+		get() = prefs.getBoolean(KEY_JP_TRANSLATION, true)
+
+	val isJapaneseFuriganaEnabled: Boolean
+		get() = prefs.getBoolean(KEY_JP_FURIGANA, true)
+
+	val isRenshuuPresenceEnabled: Boolean
+		get() = prefs.getBoolean(KEY_RENSHUU_PRESENCE, true)
+
+	var renshuuApiKey: String?
+		get() = prefs.getString(KEY_RENSHUU_API_KEY, null)?.trim()?.nullIfEmpty()
+		set(value) = prefs.edit { putString(KEY_RENSHUU_API_KEY, value?.nullIfEmpty()) }
+
+	var renshuuListKey: String?
+		get() = prefs.getString(KEY_RENSHUU_LIST, null)
+		set(value) = prefs.edit { putString(KEY_RENSHUU_LIST, value) }
+
 	val isPeriodicalBackupEnabled: Boolean
 		get() = prefs.getBoolean(KEY_BACKUP_PERIODICAL_ENABLED, false)
 
@@ -942,6 +960,12 @@ class AppSettings @Inject constructor(@ApplicationContext context: Context) {
 		const val KEY_DISCORD_RPC = "discord_rpc"
 		const val KEY_DISCORD_RPC_SKIP_NSFW = "discord_rpc_skip_nsfw"
 		const val KEY_DISCORD_TOKEN = "discord_token"
+		const val KEY_JP_OCR_BUTTON = "jp_ocr_button"
+		const val KEY_JP_TRANSLATION = "jp_translation"
+		const val KEY_JP_FURIGANA = "jp_furigana"
+		const val KEY_RENSHUU_API_KEY = "renshuu_api_key"
+		const val KEY_RENSHUU_LIST = "renshuu_list"
+		const val KEY_RENSHUU_PRESENCE = "renshuu_presence"
 		const val KEY_ACTIVE_SOURCE_PRESET = "active_source_preset"
 
 		// keys for non-persistent preferences

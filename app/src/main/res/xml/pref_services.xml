@@ -78,6 +78,14 @@
 	</PreferenceCategory>
 
 	<Preference
+		android:fragment="org.koitharu.kotatsu.japanese.ui.settings.JapaneseSettingsFragment"
+		android:icon="@drawable/ic_language"
+		android:key="japanese_learning"
+		android:summary="@string/japanese_learning_summary"
+		android:title="@string/japanese_learning"
+		app:allowDividerAbove="true" />
+
+	<Preference
 		android:fragment="org.koitharu.kotatsu.settings.discord.DiscordSettingsFragment"
 		android:icon="@drawable/ic_discord"
 		android:key="discord_rpc"

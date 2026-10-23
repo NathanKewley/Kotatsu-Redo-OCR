@@ -1,3 +1,51 @@
+# Kotatsu-Redo-OCR
+
+**A fork of [Kotatsu-Redo](https://github.com/Kotatsu-Redo/Kotatsu-Redo) for reading Japanese manga as a learner.** It adds a sidebar to the reader that pulls the Japanese text off the page you are reading, splits it into words you can look up, and lets you save those words straight to your [renshuu](https://www.renshuu.org/) study lists. Everything else is Kotatsu-Redo as-is (see below).
+
+It installs as its own app, **Kotatsu-Redo-OCR**, next to Kotatsu-Redo rather than replacing it.
+
+### Japanese learning features
+
+- **Page text sidebar.** A button in the reader's bottom bar opens a sidebar listing every speech bubble on the current page, in Japanese reading order (right to left, top to bottom). It updates as you turn the page. Text recognition runs on the device with [Google ML Kit](https://developers.google.com/ml-kit/vision/text-recognition/v2/android), including for vertical text.
+- **Words, with readings.** Each bubble is split into words, with furigana over anything containing kanji. Conjugated forms are kept together and looked up by their dictionary form, so 食べていた is one word that finds 食べる.
+- **Hidden translations.** Each bubble has an English translation hidden until you tap it, so you can check yourself after reading. Translation also runs on the device; there is a button to reveal them all.
+- **Dictionary lookups.** Tap a word for its renshuu entry: reading, part of speech, JLPT level, frequency and definitions. Tap one of its kanji for meanings, on/kun readings, stroke count, radical and parts.
+- **Add to your renshuu lists.** Each entry has an **Add to List** button that shows how many of your lists already hold the word. It opens a picker of your vocabulary schedules with a ✓ next to those that already have the word.
+
+<div align="center">
+    <img src="./docs/images/ocr-sidebar.png" alt="The page text sidebar: each bubble split into words with furigana, two translations revealed" width="270"/>
+    <img src="./docs/images/ocr-word-details.png" alt="A tapped word's renshuu entry with the Add to List button and a kanji breakdown" width="270"/>
+    <br>
+    <sub>The page text sidebar, with two translations revealed (left), and a word looked up in renshuu with one of its kanji opened (right).</sub>
+</div>
+
+### Setup
+
+1. **Turn on the button.** Go to **Settings → Services → Japanese learning** and switch on **Show OCR button in the reader**. (It is also in the reader settings, under *Reader controls in bottom bar*.)
+2. **Add your renshuu API key**, for dictionary lookups and adding words. Copy your key from renshuu's settings panel on [renshuu.org](https://www.renshuu.org/). Paste it into **renshuu API key** on the same settings screen. The summary changes to *Signed in as …* once renshuu accepts it.
+3. **Read.** Open a chapter, show the reader controls, and tap the 文A button to open the sidebar.
+
+The same settings screen also has these switches:
+
+| Setting | Default | What it does |
+|---|---|---|
+| Show readings | On | Furigana above words that contain kanji. |
+| English translation | On | The hidden translation under each bubble. The first use downloads a language model of about 30 MB. |
+| Show which lists a word is in | On | The count on **Add to List** and the ✓ in the list picker. |
+
+### Good to know
+
+- **renshuu's API allows 2000 calls a day.** Nothing is looked up until you tap a word, and answers are remembered for the session.
+  - A word lookup costs one call, or two with *Show which lists a word is in* switched on.
+  - Opening a kanji costs one call.
+  - Opening the list picker for the first time in a session costs two calls.
+- **Text recognition and translation stay on the phone.** Only the words you tap, and the words you add, are sent to renshuu.
+- **Recognition is good, not perfect.** Plain dialogue reads well. Stylised lettering, sound effects and text crossed by panel lines are often misread or missed. Tap ↻ in the sidebar to read the page again.
+- In double-page mode the sidebar reads the current page only.
+- Words go into your **vocabulary schedules** and any vocabulary lists you made yourself. Studypad is left out.
+
+---
+
 <div align="center">
 
 **[Kotatsu-Redo](https://github.com/Kotatsu-Redo/Kotatsu-Redo) is a free and open-source manga reader for Android with built-in
@@ -46,21 +94,6 @@ online content sources. The main goal of the fork is to make the best reading ma
     <img src="./metadata/en-US/images/tenInchScreenshots/1.png" alt="Tablet view" width="400"/>
     <img src="./metadata/en-US/images/tenInchScreenshots/2.png" alt="Tablet view" width="400"/>
 </div>
-
-### Contributing
-
-**📌 Pull requests are welcome, if you want:
-See [CONTRIBUTING.md](https://github.com/Kotatsu-Redo/Kotatsu-Redo/blob/devel/CONTRIBUTING.md) for the guidelines**
-
-### Certificate fingerprints
-
-```plaintext
-70:BD:84:07:13:01:84:5E:A3:D0:A4:E5:F3:3A:D2:41:0D:C9:FC:EB
-```
-
-```plaintext
-FF:D9:C9:91:06:64:07:69:3C:F4:6E:46:9F:EA:DB:88:8D:33:FB:B2:FB:A7:7E:A3:79:B0:CA:12:A3:5C:66:1A
-```
 
 ### License
 

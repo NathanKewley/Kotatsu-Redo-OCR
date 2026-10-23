@@ -47,7 +47,8 @@ android {
     }
 
     defaultConfig {
-		applicationId 'io.github.kotatsuredo.kotatsu'
+		// Its own id, so the OCR fork installs next to Kotatsu-Redo rather than over it.
+		applicationId 'io.github.kotatsuredo.kotatsu.ocr'
 		minSdk = 23
 		targetSdk = 37
 		versionCode = 2047
@@ -110,6 +111,12 @@ android {
 			excludes += [
 				'META-INF/README.md',
 				'META-INF/NOTICE.md'
+			]
+			// Kuromoji's core and dictionary jars ship identical copies of these; keep one, including
+			// the licence text.
+			pickFirsts += [
+				'META-INF/LICENSE.md',
+				'META-INF/CONTRIBUTORS.md'
 			]
 		}
 	}
@@ -220,6 +227,13 @@ dependencies {
 	implementation libs.kotlin.stdlib
 	implementation libs.kotlinx.coroutines.android
 	implementation libs.kotlinx.coroutines.guava
+	implementation libs.kotlinx.coroutines.play.services
+
+	// Japanese reading aids in the reader: on-device OCR and translation (ML Kit), and a morphological
+	// analyser to split recognised sentences into dictionary words (Kuromoji, IPADIC dictionary).
+	implementation libs.mlkit.text.recognition.japanese
+	implementation libs.mlkit.translate
+	implementation libs.kuromoji.ipadic
 
 	implementation platform(libs.androidx.compose.bom)
 	implementation libs.androidx.compose.runtime

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<!-- Wide enough for a bubble's worth of words per line, narrow enough to leave the page readable. -->
+	<dimen name="ocr_sidebar_width">320dp</dimen>
+</resources>

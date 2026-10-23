@@ -31,3 +31,7 @@
 -keep class org.acra.sender.JobSenderService
 # Loaded by ACRA through ServiceLoader (META-INF/services), so nothing references it directly.
 -keep class org.koitharu.kotatsu.core.util.SentryReportSenderFactory { *; }
+
+# Kuromoji opens its dictionary with Class.getResourceAsStream relative to its own classes, so a
+# renamed or repackaged class looks in a folder that does not exist and the tokenizer fails to load.
+-keep class com.atilika.kuromoji.** { *; }

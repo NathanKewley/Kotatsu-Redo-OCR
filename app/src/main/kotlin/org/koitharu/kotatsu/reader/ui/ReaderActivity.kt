@@ -65,6 +65,8 @@ import org.koitharu.kotatsu.core.util.ext.toUriOrNull
 import org.koitharu.kotatsu.core.util.ext.zipWithPrevious
 import org.koitharu.kotatsu.databinding.ActivityReaderBinding
 import org.koitharu.kotatsu.details.ui.pager.pages.PagesSavedObserver
+import org.koitharu.kotatsu.japanese.ui.OcrSidebarDelegate
+import org.koitharu.kotatsu.japanese.ui.OcrSidebarViewModel
 import org.koitharu.kotatsu.parsers.model.MangaChapter
 import org.koitharu.kotatsu.reader.data.TapGridSettings
 import org.koitharu.kotatsu.reader.domain.TapGridArea
@@ -109,6 +111,7 @@ class ReaderActivity :
     private val idlingDetector = IdlingDetector(TimeUnit.SECONDS.toMillis(10), this)
 
     private val viewModel: ReaderViewModel by viewModels()
+    private val ocrViewModel: OcrSidebarViewModel by viewModels()
 
     override val readerMode: ReaderMode?
         get() = readerManager.currentMode
@@ -119,6 +122,7 @@ class ReaderActivity :
     private lateinit var controlDelegate: ReaderControlDelegate
     private var gestureInsets: Insets = Insets.NONE
     private lateinit var readerManager: ReaderManager
+    private lateinit var ocrSidebar: OcrSidebarDelegate
     private val hideUiRunnable = Runnable { setUiIsVisible(false) }
     private val hideEInkFlashRunnable = Runnable { einkFlashView.isVisible = false }
     private lateinit var einkFlashView: View
@@ -137,6 +141,14 @@ class ReaderActivity :
         scrollTimer = scrollTimerFactory.create(resources, this, this)
         pageSaveHelper = pageSaveHelperFactory.create(this)
         controlDelegate = ReaderControlDelegate(resources, settings, tapGridSettings, this)
+        ocrSidebar = OcrSidebarDelegate(
+            activity = this,
+            binding = viewBinding.ocrSidebar,
+            snackbarHost = viewBinding.container,
+            topBar = viewBinding.appbarTop,
+            bottomBar = viewBinding.toolbarDocked,
+            viewModel = ocrViewModel,
+        ) { viewModel.getCurrentPage() }
         viewBinding.zoomControl.listener = this
         viewBinding.actionsView.listener = this
         viewBinding.buttonTimer?.setOnClickListener(this)
@@ -312,6 +324,7 @@ class ReaderActivity :
             rawX >= viewBinding.root.width - gestureInsets.right ||
             rawY >= viewBinding.root.height - gestureInsets.bottom ||
             viewBinding.appbarTop.hasGlobalPoint(rawX, rawY) ||
+            ocrSidebar.isTouchInside(rawX, rawY) ||
             viewBinding.toolbarDocked?.hasGlobalPoint(rawX, rawY) == true
         ) {
             false
@@ -432,6 +445,7 @@ class ReaderActivity :
             systemBars.right,
             viewBinding.toolbarDocked?.takeIf { it.isVisible }?.height ?: systemBars.bottom,
         )
+        ocrSidebar.applyInsets(systemBars)
         return WindowInsetsCompat.Builder(insets)
             .setInsets(WindowInsetsCompat.Type.systemBars(), innerInsets)
             .build()
@@ -502,6 +516,10 @@ class ReaderActivity :
         viewModel.saveCurrentPage(pageSaveHelper)
     }
 
+    override fun onOcrClick() {
+        ocrSidebar.toggle()
+    }
+
     override fun onScrollTimerClick(isLongClick: Boolean) {
         if (isLongClick) {
             scrollTimer.setActive(!scrollTimer.isActive.value)
@@ -539,6 +557,7 @@ class ReaderActivity :
     private fun onUiStateChanged(pair: Pair<ReaderUiState?, ReaderUiState?>) {
         val (previous: ReaderUiState?, uiState: ReaderUiState?) = pair
         title = uiState?.mangaName ?: getString(R.string.loading_)
+        ocrSidebar.onPageChanged()
         viewBinding.infoBar.update(uiState)
         if (uiState == null) {
             supportActionBar?.subtitle = null

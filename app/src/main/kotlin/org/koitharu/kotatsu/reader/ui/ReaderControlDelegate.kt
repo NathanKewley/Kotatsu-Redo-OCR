@@ -151,6 +151,9 @@ class ReaderControlDelegate(
 
 		fun toggleScreenOrientation()
 
+		/** Opens or closes the sidebar with the Japanese text on the current page. */
+		fun onOcrClick()
+
 		fun isReaderResumed(): Boolean
 	}
 }

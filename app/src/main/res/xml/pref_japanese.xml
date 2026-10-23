@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto">
+
+	<!-- Not persisted under its own key: it adds or removes the button in the reader's controls set,
+	     so this switch and "Controls in bottom bar" can never disagree. -->
+	<SwitchPreferenceCompat
+		android:icon="@drawable/ic_language"
+		android:key="jp_ocr_button"
+		android:persistent="false"
+		android:summary="@string/ocr_show_button_summary"
+		android:title="@string/ocr_show_button" />
+
+	<SwitchPreferenceCompat
+		android:defaultValue="true"
+		android:key="jp_furigana"
+		android:summary="@string/ocr_furigana_summary"
+		android:title="@string/ocr_furigana"
+		app:iconSpaceReserved="true" />
+
+	<SwitchPreferenceCompat
+		android:defaultValue="true"
+		android:key="jp_translation"
+		android:summary="@string/ocr_translation_summary"
+		android:title="@string/ocr_translation"
+		app:iconSpaceReserved="true" />
+
+	<PreferenceCategory android:title="@string/renshuu">
+
+		<EditTextPreference
+			android:icon="@drawable/ic_lock"
+			android:key="renshuu_api_key"
+			android:summary="@string/renshuu_api_key_summary"
+			android:title="@string/renshuu_api_key" />
+
+		<SwitchPreferenceCompat
+			android:defaultValue="true"
+			android:dependency="renshuu_api_key"
+			android:key="renshuu_presence"
+			android:summary="@string/renshuu_presence_summary"
+			android:title="@string/renshuu_presence"
+			app:iconSpaceReserved="true" />
+
+		<Preference
+			android:icon="@drawable/ic_open_external"
+			android:key="renshuu_open"
+			android:persistent="false"
+			android:title="@string/renshuu_open_settings" />
+
+	</PreferenceCategory>
+
+</androidx.preference.PreferenceScreen>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="@dimen/ocr_sidebar_width"
+	android:layout_height="match_parent"
+	android:background="?attr/colorSurfaceContainer"
+	android:clickable="true"
+	android:focusable="false"
+	android:orientation="vertical"
+	tools:ignore="Overdraw">
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="center_vertical"
+		android:minHeight="56dp"
+		android:orientation="horizontal"
+		android:paddingStart="16dp"
+		android:paddingEnd="4dp">
+
+		<LinearLayout
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:orientation="vertical">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/ocr_sidebar_title"
+				android:textAppearance="?attr/textAppearanceTitleMedium" />
+
+			<TextView
+				android:id="@+id/textView_status"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textAppearance="?attr/textAppearanceBodySmall"
+				android:textColor="?attr/colorOnSurfaceVariant"
+				tools:text="6 bubbles" />
+
+		</LinearLayout>
+
+		<com.google.android.material.button.MaterialButton
+			android:id="@+id/button_reveal_all"
+			style="?materialIconButtonStyle"
+			android:layout_width="48dp"
+			android:layout_height="48dp"
+			android:contentDescription="@string/ocr_reveal_all"
+			app:icon="@drawable/ic_eye" />
+
+		<com.google.android.material.button.MaterialButton
+			android:id="@+id/button_reload"
+			style="?materialIconButtonStyle"
+			android:layout_width="48dp"
+			android:layout_height="48dp"
+			android:contentDescription="@string/ocr_reread_page"
+			app:icon="@drawable/ic_retry" />
+
+		<com.google.android.material.button.MaterialButton
+			android:id="@+id/button_close"
+			style="?materialIconButtonStyle"
+			android:layout_width="48dp"
+			android:layout_height="48dp"
+			android:contentDescription="@string/close"
+			app:icon="@drawable/ic_close" />
+
+	</LinearLayout>
+
+	<FrameLayout
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1">
+
+		<androidx.recyclerview.widget.RecyclerView
+			android:id="@+id/recyclerView"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:clipToPadding="false"
+			android:paddingHorizontal="8dp"
+			android:paddingBottom="8dp"
+			android:scrollbars="vertical"
+			app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+			tools:listitem="@layout/item_ocr_block" />
+
+		<LinearLayout
+			android:id="@+id/layout_status"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:gravity="center_horizontal"
+			android:orientation="vertical"
+			android:padding="24dp"
+			android:visibility="gone"
+			tools:visibility="visible">
+
+			<com.google.android.material.progressindicator.CircularProgressIndicator
+				android:id="@+id/progressBar"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginBottom="12dp"
+				android:indeterminate="true" />
+
+			<TextView
+				android:id="@+id/textView_message"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:gravity="center"
+				android:textAppearance="?attr/textAppearanceBodyMedium"
+				tools:text="@string/ocr_no_text" />
+
+			<com.google.android.material.button.MaterialButton
+				android:id="@+id/button_retry"
+				style="?materialButtonTonalStyle"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="12dp"
+				android:text="@string/try_again" />
+
+		</LinearLayout>
+
+	</FrameLayout>
+
+</LinearLayout>
