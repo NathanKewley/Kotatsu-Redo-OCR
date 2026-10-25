@@ -45,6 +45,9 @@ class OcrSidebarViewModel @Inject constructor(
 ) : BaseViewModel() {
 
 	val isOpen = MutableStateFlow(false)
+
+	/** Remembered across chapters and launches: someone who pins it wants it that way every time. */
+	val isPinned = MutableStateFlow(settings.isOcrSidebarPinned)
 	val onChooseList = MutableEventFlow<ListChoice>()
 	val onMessage = MutableEventFlow<OcrMessage>()
 
@@ -103,6 +106,12 @@ class OcrSidebarViewModel @Inject constructor(
 
 	fun setOpen(open: Boolean) {
 		isOpen.value = open
+	}
+
+	fun togglePinned() {
+		val pinned = !isPinned.value
+		isPinned.value = pinned
+		settings.isOcrSidebarPinned = pinned
 	}
 
 	fun onPageChanged(page: MangaPage?) {

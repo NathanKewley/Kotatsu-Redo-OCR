@@ -29,3 +29,6 @@
 /.kotlin/
 /.idea/AndroidProjectSystem.xml
 /.idea
+
+# Release signing key and its password. Never commit; back it up, every future update needs it.
+/keystore/

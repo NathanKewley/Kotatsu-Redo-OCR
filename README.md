@@ -6,7 +6,7 @@ It installs as its own app, **Kotatsu-Redo-OCR**, next to Kotatsu-Redo rather th
 
 ### Japanese learning features
 
-- **Page text sidebar.** A button in the reader's bottom bar opens a sidebar listing every speech bubble on the current page, in Japanese reading order (right to left, top to bottom). It updates as you turn the page. Text recognition runs on the device with [Google ML Kit](https://developers.google.com/ml-kit/vision/text-recognition/v2/android), including for vertical text.
+- **Page text sidebar.** A button in the reader's bottom bar opens a sidebar listing every speech bubble on the current page, in Japanese reading order (right to left, top to bottom). It updates as you turn the page. Text recognition runs on the device with [Google ML Kit](https://developers.google.com/ml-kit/vision/text-recognition/v2/android), including for vertical text. On a tablet in landscape, the pin button docks the sidebar beside the page, which shrinks to fit, instead of floating over it. It stays pinned until you unpin it.
 - **Words, with readings.** Each bubble is split into words, with furigana over anything containing kanji. Conjugated forms are kept together and looked up by their dictionary form, so 食べていた is one word that finds 食べる.
 - **Hidden translations.** Each bubble has an English translation hidden until you tap it, so you can check yourself after reading. Translation also runs on the device; there is a button to reveal them all.
 - **Dictionary lookups.** Tap a word for its renshuu entry: reading, part of speech, JLPT level, frequency and definitions. Tap one of its kanji for meanings, on/kun readings, stroke count, radical and parts.
@@ -21,14 +21,14 @@ It installs as its own app, **Kotatsu-Redo-OCR**, next to Kotatsu-Redo rather th
 
 ### Setup
 
-1. **Turn on the button.** Go to **Settings → Services → Japanese learning** and switch on **Show OCR button in the reader**. (It is also in the reader settings, under *Reader controls in bottom bar*.)
-2. **Add your renshuu API key**, for dictionary lookups and adding words. Copy your key from renshuu's settings panel on [renshuu.org](https://www.renshuu.org/). Paste it into **renshuu API key** on the same settings screen. The summary changes to *Signed in as …* once renshuu accepts it.
-3. **Read.** Open a chapter, show the reader controls, and tap the 文A button to open the sidebar.
+1. **Add your renshuu API key**, for dictionary lookups and adding words. Copy your key from renshuu's settings panel on [renshuu.org](https://www.renshuu.org/). Go to **Settings → Services → Japanese learning** and paste it into **renshuu API key**. The summary changes to *Signed in as …* once renshuu accepts it.
+2. **Read.** Open a chapter, show the reader controls, and tap the 文A button to open the sidebar.
 
 The same settings screen also has these switches:
 
 | Setting | Default | What it does |
 |---|---|---|
+| Show OCR button in the reader | On | The 文A button in the reader's bottom bar. It is also under *Reader controls in bottom bar* in the reader settings. |
 | Show readings | On | Furigana above words that contain kanji. |
 | English translation | On | The hidden translation under each bubble. The first use downloads a language model of about 30 MB. |
 | Show which lists a word is in | On | The count on **Add to List** and the ✓ in the list picker. |

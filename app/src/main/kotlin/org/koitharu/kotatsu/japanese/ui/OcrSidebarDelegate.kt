@@ -7,12 +7,14 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.Insets
 import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.transition.Slide
 import androidx.transition.TransitionManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.flow.combine
 import org.koitharu.kotatsu.R
 import org.koitharu.kotatsu.core.nav.router
 import org.koitharu.kotatsu.core.util.ext.getDisplayMessage
@@ -38,6 +40,8 @@ class OcrSidebarDelegate(
 	private val snackbarHost: View,
 	private val topBar: View,
 	private val bottomBar: View?,
+	/** The reader's page and what floats over it, all moved clear of the sidebar while it is pinned. */
+	pageViews: List<View>,
 	private val viewModel: OcrSidebarViewModel,
 	private val currentPage: () -> MangaPage?,
 ) : OcrSidebarListener {
@@ -45,6 +49,10 @@ class OcrSidebarDelegate(
 	private val adapter = OcrBlockAdapter(this)
 	private var shownBlocks: List<OcrBlockModel> = emptyList()
 	private var systemBars: Insets = Insets.NONE
+
+	/** Only where the screen is wide enough to give up a sidebar's width and still show a page well. */
+	private val isPinnable = activity.resources.getBoolean(R.bool.is_tablet)
+	private val pageMarginsEnd = pageViews.associateWith { (it.layoutParams as ViewGroup.MarginLayoutParams).marginEnd }
 
 	private val backCallback = object : OnBackPressedCallback(false) {
 		override fun handleOnBackPressed() = viewModel.setOpen(false)
@@ -58,6 +66,8 @@ class OcrSidebarDelegate(
 		binding.buttonReload.setOnClickListener { viewModel.reload() }
 		binding.buttonRetry.setOnClickListener { viewModel.reload() }
 		binding.buttonRevealAll.setOnClickListener { viewModel.toggleAllTranslations() }
+		binding.buttonPin.isVisible = isPinnable
+		binding.buttonPin.setOnClickListener { viewModel.togglePinned() }
 		binding.buttonClose.setTooltipCompat(binding.buttonClose.contentDescription)
 		binding.buttonReload.setTooltipCompat(binding.buttonReload.contentDescription)
 		activity.onBackPressedDispatcher.addCallback(activity, backCallback)
@@ -66,7 +76,8 @@ class OcrSidebarDelegate(
 		val onBarLayout = View.OnLayoutChangeListener { _, _, _, _, _, _, _, _, _ -> updatePadding() }
 		topBar.addOnLayoutChangeListener(onBarLayout)
 		bottomBar?.addOnLayoutChangeListener(onBarLayout)
-		viewModel.isOpen.observe(activity, ::onOpenChanged)
+		combine(viewModel.isOpen, viewModel.isPinned) { isOpen, isPinned -> isOpen to (isPinnable && isPinned) }
+			.observe(activity, ::onOpenChanged)
 		viewModel.content.observe(activity, ::onContentChanged)
 		viewModel.onChooseList.observeEvent(activity, ::showListChooser)
 		viewModel.onMessage.observeEvent(activity, ::showMessage)
@@ -115,9 +126,19 @@ class OcrSidebarDelegate(
 		activity.router.openJapaneseSettings()
 	}
 
-	private fun onOpenChanged(isOpen: Boolean) {
-		backCallback.isEnabled = isOpen
+	private fun onOpenChanged(state: Pair<Boolean, Boolean>) {
+		val (isOpen, isPinned) = state
+		// Pinned, it is part of the layout like the reader's own bars, so back leaves the reader as usual.
+		backCallback.isEnabled = isOpen && !isPinned
+		binding.buttonPin.setIconResource(if (isPinned) R.drawable.ic_unpin else R.drawable.ic_pin)
+		binding.buttonPin.setContentDescriptionAndTooltip(
+			if (isPinned) R.string.ocr_unpin_sidebar else R.string.ocr_pin_sidebar,
+		)
 		val sidebar = binding.root
+		val reserved = if (isOpen && isPinned) sidebar.layoutParams.width else 0
+		for ((view, marginEnd) in pageMarginsEnd) {
+			view.updateLayoutParams<ViewGroup.MarginLayoutParams> { this.marginEnd = marginEnd + reserved }
+		}
 		if (sidebar.isVisible == isOpen) {
 			return
 		}

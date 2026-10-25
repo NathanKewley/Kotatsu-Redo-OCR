@@ -147,6 +147,9 @@ class ReaderActivity :
             snackbarHost = viewBinding.container,
             topBar = viewBinding.appbarTop,
             bottomBar = viewBinding.toolbarDocked,
+            pageViews = with(viewBinding) {
+                listOf(container, infoBar, zoomControl, timerControl, toastView, layoutLoading)
+            },
             viewModel = ocrViewModel,
         ) { viewModel.getCurrentPage() }
         viewBinding.zoomControl.listener = this

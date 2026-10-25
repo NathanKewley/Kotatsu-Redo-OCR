@@ -73,6 +73,16 @@ abstract class BasePageHolder<B : ViewBinding>(
 			ssiv.isEagerLoadingEnabled = !context.isLowRamDevice()
 			ssiv.addOnImageEventListener(viewModel)
 			ssiv.addOnImageEventListener(this@BasePageHolder)
+			if (this@BasePageHolder !is WebtoonHolder) {
+				// SSIV keeps its zoom when the view is resized, so a page fitted to the old size ends up cropped
+				// or shrunk - after a split-screen resize, or the OCR sidebar being pinned beside it. Fit it again.
+				// Webtoon pages refit themselves, in WebtoonImageView.onSizeChanged.
+				ssiv.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+					if (right - left != oldRight - oldLeft || bottom - top != oldBottom - oldTop) {
+						v.post { if (viewModel.state.value is PageState.Shown) onReady() }
+					}
+				}
+			}
 		}
 		val clickListener = View.OnClickListener { v ->
 			when (v.id) {

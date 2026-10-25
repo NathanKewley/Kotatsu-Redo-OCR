@@ -16,9 +16,11 @@ enum class ReaderControl {
 		 *
 		 * PAGES_SHEET is still a control; it is simply no longer on by default. Anyone who wants it
 		 * back turns it on in the reader settings.
+		 *
+		 * JAPANESE_OCR is on from the start: reading Japanese with it is what this fork is for.
 		 */
 		val DEFAULT: Set<ReaderControl> = EnumSet.of(
-			PREV_CHAPTER, NEXT_CHAPTER, SLIDER, COMMENTS,
+			PREV_CHAPTER, NEXT_CHAPTER, SLIDER, COMMENTS, JAPANESE_OCR,
 		)
 	}
 }

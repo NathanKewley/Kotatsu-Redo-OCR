@@ -42,6 +42,17 @@
 
 		</LinearLayout>
 
+		<!-- Wide screens only: pinned, the sidebar takes its own space and the page shrinks beside it. -->
+		<com.google.android.material.button.MaterialButton
+			android:id="@+id/button_pin"
+			style="?materialIconButtonStyle"
+			android:layout_width="48dp"
+			android:layout_height="48dp"
+			android:contentDescription="@string/ocr_pin_sidebar"
+			android:visibility="gone"
+			app:icon="@drawable/ic_pin"
+			tools:visibility="visible" />
+
 		<com.google.android.material.button.MaterialButton
 			android:id="@+id/button_reveal_all"
 			style="?materialIconButtonStyle"

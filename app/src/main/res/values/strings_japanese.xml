@@ -14,6 +14,8 @@
 	<string name="ocr_reveal_all">Reveal all translations</string>
 	<string name="ocr_hide_all">Hide all translations</string>
 	<string name="ocr_reread_page">Read page again</string>
+	<string name="ocr_pin_sidebar">Pin beside the page</string>
+	<string name="ocr_unpin_sidebar">Float over the page</string>
 	<string name="ocr_loading_page">Loading page…</string>
 	<string name="ocr_recognizing">Reading text…</string>
 	<string name="ocr_analyzing">Splitting into words…</string>

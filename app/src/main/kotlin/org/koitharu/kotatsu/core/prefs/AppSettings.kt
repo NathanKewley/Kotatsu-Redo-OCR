@@ -604,6 +604,10 @@ class AppSettings @Inject constructor(@ApplicationContext context: Context) {
 	val isRenshuuPresenceEnabled: Boolean
 		get() = prefs.getBoolean(KEY_RENSHUU_PRESENCE, true)
 
+	var isOcrSidebarPinned: Boolean
+		get() = prefs.getBoolean(KEY_JP_OCR_PINNED, false)
+		set(value) = prefs.edit { putBoolean(KEY_JP_OCR_PINNED, value) }
+
 	var renshuuApiKey: String?
 		get() = prefs.getString(KEY_RENSHUU_API_KEY, null)?.trim()?.nullIfEmpty()
 		set(value) = prefs.edit { putString(KEY_RENSHUU_API_KEY, value?.nullIfEmpty()) }
@@ -963,6 +967,7 @@ class AppSettings @Inject constructor(@ApplicationContext context: Context) {
 		const val KEY_JP_OCR_BUTTON = "jp_ocr_button"
 		const val KEY_JP_TRANSLATION = "jp_translation"
 		const val KEY_JP_FURIGANA = "jp_furigana"
+		const val KEY_JP_OCR_PINNED = "jp_ocr_pinned"
 		const val KEY_RENSHUU_API_KEY = "renshuu_api_key"
 		const val KEY_RENSHUU_LIST = "renshuu_list"
 		const val KEY_RENSHUU_PRESENCE = "renshuu_presence"
