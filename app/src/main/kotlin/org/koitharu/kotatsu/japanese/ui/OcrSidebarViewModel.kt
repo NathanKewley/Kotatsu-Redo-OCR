@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.plus
@@ -23,6 +24,8 @@ import org.koitharu.kotatsu.core.util.ext.call
 import org.koitharu.kotatsu.core.util.ext.printStackTraceDebug
 import org.koitharu.kotatsu.japanese.nlp.JapaneseTokenizer
 import org.koitharu.kotatsu.japanese.nlp.isKanji
+import org.koitharu.kotatsu.japanese.ocr.EngineSetup
+import org.koitharu.kotatsu.japanese.ocr.ModelStore
 import org.koitharu.kotatsu.japanese.ocr.PageTextRecognizer
 import org.koitharu.kotatsu.japanese.renshuu.AddToListResult
 import org.koitharu.kotatsu.japanese.renshuu.RenshuuList
@@ -42,6 +45,8 @@ class OcrSidebarViewModel @Inject constructor(
 	private val translator: JapaneseTranslator,
 	private val renshuu: RenshuuRepository,
 	private val settings: AppSettings,
+	val engineSetup: EngineSetup,
+	val models: ModelStore,
 ) : BaseViewModel() {
 
 	val isOpen = MutableStateFlow(false)
@@ -101,6 +106,13 @@ class OcrSidebarViewModel @Inject constructor(
 						processPage(request.first)
 					}
 				}
+		}
+		launchJob(Dispatchers.Default) {
+			// Another recogniser reads pages differently: what the last one read is no longer the answer.
+			settings.observeAsFlow(AppSettings.KEY_JP_OCR_ENGINE) { ocrEngine }.drop(1).collect {
+				pageCache.evictAll()
+				reloadCounter.update { it + 1 }
+			}
 		}
 	}
 

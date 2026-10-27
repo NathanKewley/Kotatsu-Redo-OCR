@@ -41,6 +41,28 @@
 		<item quantity="one">%d stroke</item>
 		<item quantity="other">%d strokes</item>
 	</plurals>
+	<string name="ocr_engine">Text recogniser</string>
+	<string name="ocr_engine_none">Not chosen yet</string>
+	<string name="ocr_engine_choose_title">Choose a text recogniser</string>
+	<string name="ocr_engine_choose_intro">Pages are read on your phone and never uploaded.</string>
+	<string name="ocr_engine_paddle_manga" translatable="false">PaddleOCR + manga-ocr</string>
+	<string name="ocr_engine_paddle" translatable="false">PaddleOCR</string>
+	<string name="ocr_engine_mlkit" translatable="false">ML Kit</string>
+	<string name="ocr_engine_download_size">Download: %s</string>
+	<string name="ocr_engine_no_download">No download</string>
+	<!-- Characters read right on manga-style test pages, timed on a Pixel 4. -->
+	<string name="ocr_engine_accuracy">Accuracy: %d%%</string>
+	<string name="ocr_engine_speed">About %ds a page</string>
+	<string name="ocr_engine_use">Use</string>
+	<string name="ocr_engine_downloading">Downloading %s</string>
+	<string name="ocr_engine_downloading_message">Keep the app open until it finishes. If it stops, it carries on from where it got to next time.</string>
+	<string name="ocr_engine_download_progress">%1$s of %2$s</string>
+	<string name="ocr_engine_download_failed">Download failed</string>
+	<string name="ocr_engine_download_failed_message">%s. What was downloaded is kept, and trying again carries on from there.</string>
+	<string name="ocr_error_models_missing">Choose a text recogniser to read this page</string>
+	<string name="ocr_error_model_corrupt">A model did not download correctly</string>
+	<string name="ocr_error_connection_lost">The internet connection was lost</string>
+	<string name="ocr_error_download_timeout">The download stalled</string>
 	<string name="renshuu" translatable="false">renshuu</string>
 	<string name="renshuu_api_key">renshuu API key</string>
 	<string name="renshuu_api_key_summary">Needed to look words up and add them to your lists. Find it in renshuu\'s settings panel</string>

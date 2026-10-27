@@ -3,6 +3,7 @@ package org.koitharu.kotatsu.japanese.ui.settings
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.preference.EditTextPreference
@@ -12,16 +13,30 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.koitharu.kotatsu.R
 import org.koitharu.kotatsu.core.nav.router
 import org.koitharu.kotatsu.core.prefs.AppSettings
+import org.koitharu.kotatsu.core.prefs.observeAsFlow
 import org.koitharu.kotatsu.core.prefs.ReaderControl
 import org.koitharu.kotatsu.core.ui.BasePreferenceFragment
 import org.koitharu.kotatsu.core.util.ext.getDisplayMessage
 import org.koitharu.kotatsu.core.util.ext.observe
+import org.koitharu.kotatsu.japanese.ocr.EngineSetup
+import org.koitharu.kotatsu.japanese.ocr.ModelStore
+import org.koitharu.kotatsu.japanese.ui.EngineDialogs
 import org.koitharu.kotatsu.japanese.ui.settings.JapaneseSettingsViewModel.ApiKeyState
+import org.koitharu.kotatsu.japanese.ui.titleRes
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class JapaneseSettingsFragment : BasePreferenceFragment(R.string.japanese_learning) {
 
 	private val viewModel by viewModels<JapaneseSettingsViewModel>()
+
+	@Inject
+	lateinit var engineSetup: EngineSetup
+
+	@Inject
+	lateinit var models: ModelStore
+
+	private val engineDialogs by lazy { EngineDialogs(requireActivity() as AppCompatActivity, engineSetup, models) }
 
 	override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
 		addPreferencesFromResource(R.xml.pref_japanese)
@@ -44,9 +59,19 @@ class JapaneseSettingsFragment : BasePreferenceFragment(R.string.japanese_learni
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 		viewModel.apiKeyState.observe(viewLifecycleOwner, ::bindApiKeyState)
+		engineSetup.state.observe(viewLifecycleOwner, engineDialogs::bind)
+		settings.observeAsFlow(AppSettings.KEY_JP_OCR_ENGINE) { ocrEngine }.observe(viewLifecycleOwner) { engine ->
+			findPreference<Preference>(AppSettings.KEY_JP_OCR_ENGINE)?.summary =
+				getString(engine?.takeIf { it.isSupported }?.titleRes() ?: R.string.ocr_engine_none)
+		}
 	}
 
 	override fun onPreferenceTreeClick(preference: Preference): Boolean = when (preference.key) {
+		AppSettings.KEY_JP_OCR_ENGINE -> {
+			engineDialogs.showChooser(settings.ocrEngine)
+			true
+		}
+
 		KEY_OPEN_RENSHUU -> {
 			router.openExternalBrowser(RENSHUU_URL, getString(R.string.renshuu_open_settings))
 			true

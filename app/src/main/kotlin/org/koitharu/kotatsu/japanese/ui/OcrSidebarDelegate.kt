@@ -25,6 +25,8 @@ import org.koitharu.kotatsu.core.util.ext.observeEvent
 import org.koitharu.kotatsu.core.util.ext.setContentDescriptionAndTooltip
 import org.koitharu.kotatsu.core.util.ext.setTooltipCompat
 import org.koitharu.kotatsu.databinding.LayoutOcrSidebarBinding
+import org.koitharu.kotatsu.japanese.ocr.EngineSetup
+import org.koitharu.kotatsu.japanese.ocr.ModelsMissingException
 import org.koitharu.kotatsu.japanese.renshuu.RenshuuAuthException
 import org.koitharu.kotatsu.japanese.renshuu.RenshuuWord
 import org.koitharu.kotatsu.parsers.model.MangaPage
@@ -47,6 +49,7 @@ class OcrSidebarDelegate(
 ) : OcrSidebarListener {
 
 	private val adapter = OcrBlockAdapter(this)
+	private val engineDialogs = EngineDialogs(activity, viewModel.engineSetup, viewModel.models)
 	private var shownBlocks: List<OcrBlockModel> = emptyList()
 	private var systemBars: Insets = Insets.NONE
 
@@ -79,6 +82,14 @@ class OcrSidebarDelegate(
 		combine(viewModel.isOpen, viewModel.isPinned) { isOpen, isPinned -> isOpen to (isPinnable && isPinned) }
 			.observe(activity, ::onOpenChanged)
 		viewModel.content.observe(activity, ::onContentChanged)
+		combine(viewModel.isOpen, viewModel.engineSetup.state, ::Pair).observe(activity) { (isOpen, state) ->
+			engineDialogs.bind(state)
+			// The first time the sidebar opens, or when the chosen recogniser's models are gone. Not
+			// choosing closes it again: there is nothing it can show without one.
+			if (isOpen && state == EngineSetup.State.Idle && viewModel.engineSetup.isNeeded) {
+				engineDialogs.showChooser(null) { viewModel.setOpen(false) }
+			}
+		}
 		viewModel.onChooseList.observeEvent(activity, ::showListChooser)
 		viewModel.onMessage.observeEvent(activity, ::showMessage)
 		viewModel.onError.observeEvent(activity, ::showError)
@@ -171,7 +182,11 @@ class OcrSidebarDelegate(
 		binding.textViewMessage.text = when (status) {
 			OcrStatus.Idle -> res.getString(R.string.ocr_no_page)
 			is OcrStatus.Working -> res.getString(status.phase.titleRes())
-			is OcrStatus.Failed -> status.error.getDisplayMessage(res)
+			is OcrStatus.Failed -> if (status.error is ModelsMissingException) {
+				res.getString(R.string.ocr_error_models_missing)
+			} else {
+				status.error.getDisplayMessage(res)
+			}
 			is OcrStatus.Done -> res.getString(R.string.ocr_no_text)
 		}
 		val hasTranslations = content.items.any { it.translation != TranslationState.Disabled }

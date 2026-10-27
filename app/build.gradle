@@ -234,6 +234,9 @@ dependencies {
 	implementation libs.mlkit.text.recognition.japanese
 	implementation libs.mlkit.translate
 	implementation libs.kuromoji.ipadic
+	// Runs PaddleOCR and manga-ocr, the more accurate recognisers. Their models are downloaded when
+	// chosen (see japanese/ocr/ModelStore).
+	implementation libs.onnxruntime.android
 
 	implementation platform(libs.androidx.compose.bom)
 	implementation libs.androidx.compose.runtime

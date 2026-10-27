@@ -6,7 +6,7 @@ It installs as its own app, **Kotatsu-Redo-OCR**, next to Kotatsu-Redo rather th
 
 ### Japanese learning features
 
-- **Page text sidebar.** A button in the reader's bottom bar opens a sidebar listing every speech bubble on the current page, in Japanese reading order (right to left, top to bottom). It updates as you turn the page. Text recognition runs on the device with [Google ML Kit](https://developers.google.com/ml-kit/vision/text-recognition/v2/android), including for vertical text. On a tablet in landscape, the pin button docks the sidebar beside the page, which shrinks to fit, instead of floating over it. It stays pinned until you unpin it.
+- **Page text sidebar.** A button in the reader's bottom bar opens a sidebar listing every speech bubble on the current page, in Japanese reading order (right to left, top to bottom). It updates as you turn the page. Text recognition runs on the device, with a choice of three recognisers (see *Setup*). On a tablet in landscape, the pin button docks the sidebar beside the page, which shrinks to fit, instead of floating over it. It stays pinned until you unpin it.
 - **Words, with readings.** Each bubble is split into words, with furigana over anything containing kanji. Conjugated forms are kept together and looked up by their dictionary form, so 食べていた is one word that finds 食べる.
 - **Hidden translations.** Each bubble has an English translation hidden until you tap it, so you can check yourself after reading. Translation also runs on the device; there is a button to reveal them all.
 - **Dictionary lookups.** Tap a word for its renshuu entry: reading, part of speech, JLPT level, frequency and definitions. Tap one of its kanji for meanings, on/kun readings, stroke count, radical and parts.
@@ -23,6 +23,17 @@ It installs as its own app, **Kotatsu-Redo-OCR**, next to Kotatsu-Redo rather th
 
 1. **Add your renshuu API key**, for dictionary lookups and adding words. Copy your key from renshuu's settings panel on [renshuu.org](https://www.renshuu.org/). Go to **Settings → Services → Japanese learning** and paste it into **renshuu API key**. The summary changes to *Signed in as …* once renshuu accepts it.
 2. **Read.** Open a chapter, show the reader controls, and tap the 文A button to open the sidebar.
+3. **Choose a text recogniser.** The first time the sidebar opens, it asks which recogniser to use. You can change it later under **Text recogniser** in the same settings screen. The two PaddleOCR choices download their models once, when chosen:
+
+   | Recogniser | Download | Accuracy* | Speed* |
+   |---|---|---|---|
+   | PaddleOCR + manga-ocr | 482 MB | 96% | about 11s a page |
+   | PaddleOCR | 22 MB | 88% | about 2s a page |
+   | [ML Kit](https://developers.google.com/ml-kit/vision/text-recognition/v2/android) | none | 70% | about 2s a page |
+
+   \* Characters read correctly on manga-style test pages, timed on a Pixel 4.
+
+   [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR) finds the text and reads horizontal lines. [manga-ocr](https://github.com/kha-white/manga-ocr) re-reads vertical bubbles, getting small kana and punctuation right and leaving furigana out. The PaddleOCR choices need Android 7 or newer.
 
 The same settings screen also has these switches:
 
@@ -40,7 +51,7 @@ The same settings screen also has these switches:
   - Opening a kanji costs one call.
   - Opening the list picker for the first time in a session costs two calls.
 - **Text recognition and translation stay on the phone.** Only the words you tap, and the words you add, are sent to renshuu.
-- **Recognition is good, not perfect.** Plain dialogue reads well. Stylised lettering, sound effects and text crossed by panel lines are often misread or missed. Tap ↻ in the sidebar to read the page again.
+- **Recognition is good, not perfect.** Plain dialogue reads well, best with PaddleOCR + manga-ocr. Stylised lettering, sound effects and text crossed by panel lines are often misread or missed. Tap ↻ in the sidebar to read the page again.
 - In double-page mode the sidebar reads the current page only.
 - Words go into your **vocabulary schedules** and any vocabulary lists you made yourself. Studypad is left out.
 

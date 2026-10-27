@@ -12,6 +12,13 @@
 		android:summary="@string/ocr_show_button_summary"
 		android:title="@string/ocr_show_button" />
 
+	<!-- Not persisted by the preference: it is set once the recogniser's models are downloaded. -->
+	<Preference
+		android:key="jp_ocr_engine"
+		android:persistent="false"
+		android:title="@string/ocr_engine"
+		app:iconSpaceReserved="true" />
+
 	<SwitchPreferenceCompat
 		android:defaultValue="true"
 		android:key="jp_furigana"

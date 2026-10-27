@@ -45,6 +45,10 @@
 		</intent>
 	</queries>
 
+	<!-- ONNX Runtime asks for Android 7. The app still runs on 6, where only ML Kit is offered and
+	     ONNX Runtime is never loaded (see japanese/ocr/OcrEngine). -->
+	<uses-sdk tools:overrideLibrary="ai.onnxruntime" />
+
 	<application
 		android:name="org.koitharu.kotatsu.KotatsuApp"
 		android:allowBackup="true"
@@ -1717,6 +1721,13 @@
 
 		</activity-alias>
 
+
+		<!-- ONNX Runtime reports usage to Microsoft from app start. Manga pages are read on the phone,
+		     and nothing about them leaves it. -->
+		<provider
+			android:name="ai.onnxruntime.TelemetryInitializer"
+			android:authorities="${applicationId}.onnxruntime_telemetry_initializer"
+			tools:node="remove" />
 	</application>
 
 </manifest>

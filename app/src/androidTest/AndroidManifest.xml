@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- As in the app's manifest: ONNX Runtime asks for Android 7, the app still supports 6. -->
+<manifest
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools">
+
+	<uses-sdk tools:overrideLibrary="ai.onnxruntime" />
+
+</manifest>

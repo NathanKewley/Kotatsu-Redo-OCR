@@ -25,6 +25,7 @@ import org.koitharu.kotatsu.core.model.ZoomMode
 import org.koitharu.kotatsu.core.network.DoHProvider
 import org.koitharu.kotatsu.core.util.ext.connectivityManager
 import org.koitharu.kotatsu.core.util.ext.getEnumValue
+import org.koitharu.kotatsu.japanese.ocr.OcrEngine
 import org.koitharu.kotatsu.core.util.ext.observeChanges
 import org.koitharu.kotatsu.core.util.ext.putAll
 import org.koitharu.kotatsu.core.util.ext.putEnumValue
@@ -604,6 +605,11 @@ class AppSettings @Inject constructor(@ApplicationContext context: Context) {
 	val isRenshuuPresenceEnabled: Boolean
 		get() = prefs.getBoolean(KEY_RENSHUU_PRESENCE, true)
 
+	/** The recogniser pages are read with, or null until one has been chosen (see EngineSetup). */
+	var ocrEngine: OcrEngine?
+		get() = prefs.getString(KEY_JP_OCR_ENGINE, null)?.let(OcrEngine::fromId)
+		set(value) = prefs.edit { putString(KEY_JP_OCR_ENGINE, value?.id) }
+
 	var isOcrSidebarPinned: Boolean
 		get() = prefs.getBoolean(KEY_JP_OCR_PINNED, false)
 		set(value) = prefs.edit { putBoolean(KEY_JP_OCR_PINNED, value) }
@@ -968,6 +974,7 @@ class AppSettings @Inject constructor(@ApplicationContext context: Context) {
 		const val KEY_JP_TRANSLATION = "jp_translation"
 		const val KEY_JP_FURIGANA = "jp_furigana"
 		const val KEY_JP_OCR_PINNED = "jp_ocr_pinned"
+		const val KEY_JP_OCR_ENGINE = "jp_ocr_engine"
 		const val KEY_RENSHUU_API_KEY = "renshuu_api_key"
 		const val KEY_RENSHUU_LIST = "renshuu_list"
 		const val KEY_RENSHUU_PRESENCE = "renshuu_presence"
